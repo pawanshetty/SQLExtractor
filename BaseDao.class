@@ -1,0 +1,65 @@
+// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
+// Source File Name:   BaseDao.java
+
+package com.mindtree.dao.impl;
+
+import com.mindtree.exception.DaoException;
+import java.sql.*;
+
+// Referenced classes of package com.mindtree.dao.impl:
+//            DaoResource
+
+public class BaseDao
+{
+
+    public BaseDao()
+        throws DaoException
+    {
+        try
+        {
+            Class.forName(driver);
+        }
+        catch(ClassNotFoundException e)
+        {
+            e.printStackTrace();
+            throw new DaoException("unable to load the class", e);
+        }
+    }
+
+    public static Connection getConnection()
+        throws DaoException
+    {
+        return DriverManager.getConnection(url, username, password);
+        SQLException e;
+        e;
+        e.printStackTrace();
+        throw new DaoException("unable to get the connection", e);
+    }
+
+    public void closeConnection(Statement st, ResultSet rs, Connection con)
+        throws DaoException
+    {
+        try
+        {
+            if(con != null)
+                con.close();
+            if(st != null)
+                st.close();
+            if(rs != null)
+                rs.close();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new DaoException("unable to close the connection", e);
+        }
+    }
+
+    private static final String driver = DaoResource.getString("driver");
+    private static final String url = DaoResource.getString("url");
+    private static final String username = DaoResource.getString("username");
+    private static final String password = DaoResource.getString("password");
+
+}

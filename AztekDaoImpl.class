@@ -1,0 +1,53 @@
+// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
+// Source File Name:   AztekDaoImpl.java
+
+package com.mindtree.daoImpl;
+
+import com.mindtree.Exception.DaoException;
+import com.mindtree.dao.AztekDao;
+import com.mindtree.dao.DaoFactory;
+import com.mindtree.entity.Employee;
+import com.mindtree.entity.Stock;
+import java.util.Date;
+import java.util.List;
+
+public class AztekDaoImpl extends DaoFactory
+    implements AztekDao
+{
+
+    public AztekDaoImpl()
+    {
+    }
+
+    public boolean createEmployee(Employee emp)
+        throws DaoException
+    {
+        throw new Error("Unresolved compilation problems: \n\tType mismatch: cannot convert from java.sql.Connection to com.mysql.jdbc.Connection\n\tType mismatch: cannot convert from java.sql.PreparedStatement to com.mysql.jdbc.PreparedStatement\n\tDate cannot be resolved to a type\n\tDate cannot be resolved to a type\n");
+    }
+
+    public Employee getEmployee(int parseInt)
+        throws DaoException
+    {
+        throw new Error("Unresolved compilation problems: \n\tType mismatch: cannot convert from java.sql.Connection to com.mysql.jdbc.Connection\n\tType mismatch: cannot convert from java.sql.PreparedStatement to com.mysql.jdbc.PreparedStatement\n\tType mismatch: cannot convert from java.sql.ResultSet to com.mysql.jdbc.ResultSet\n");
+    }
+
+    public boolean enterStock(Stock stock)
+        throws DaoException
+    {
+        throw new Error("Unresolved compilation problems: \n\tType mismatch: cannot convert from java.sql.Connection to com.mysql.jdbc.Connection\n\tType mismatch: cannot convert from java.sql.PreparedStatement to com.mysql.jdbc.PreparedStatement\n\tDate cannot be resolved to a type\n");
+    }
+
+    public List getFinance(int i, String s, Date date, Date date1)
+        throws DaoException
+    {
+        throw new Error("Unresolved compilation problem: \n\tThe type AztekDaoImpl must implement the inherited abstract method AztekDao.getFinance(int, String, Date, Date)\n");
+    }
+
+    public List searchEmployee(Employee employee)
+        throws DaoException
+    {
+        throw new Error("Unresolved compilation problem: \n\tThe type AztekDaoImpl must implement the inherited abstract method AztekDao.searchEmployee(Employee)\n");
+    }
+}

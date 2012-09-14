@@ -1,0 +1,34 @@
+// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
+// Source File Name:   MyFileReader.java
+
+import java.io.*;
+import java.util.StringTokenizer;
+
+public class MyFileReader
+{
+
+    public MyFileReader()
+    {
+    }
+
+    public static void main(String args[])
+        throws IOException
+    {
+        BufferedReader bufferedreader = new BufferedReader(new FileReader("MyFileReader.txt"));
+        String s = bufferedreader.readLine();
+        System.out.println((new StringBuilder()).append("The line is ").append(s).toString());
+        System.out.println((new StringBuilder()).append("The line has ").append(s.length()).append(" characters").toString());
+        System.out.println();
+        System.out.println("Breaking the line into tokens we get:");
+        int i = 0;
+        String s1;
+        for(StringTokenizer stringtokenizer = new StringTokenizer(s); stringtokenizer.hasMoreTokens(); System.out.println((new StringBuilder()).append("    Token ").append(i).append(" is: ").append(s1).toString()))
+        {
+            s1 = stringtokenizer.nextToken();
+            i++;
+        }
+
+    }
+}

@@ -1,0 +1,186 @@
+// Decompiled by Jad v1.5.8f. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) 
+// Source File Name:   BookingDaoImpl.java
+
+package com.mindtree.dao.impl;
+
+import com.mindtree.dao.BookingDao;
+import com.mindtree.entity.BookHotel;
+import com.mindtree.entity.City;
+import com.mindtree.entity.HotelInfo;
+import com.mindtree.exception.DaoException;
+import java.io.PrintStream;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+// Referenced classes of package com.mindtree.dao.impl:
+//            BaseDao
+
+public class BookingDaoImpl extends BaseDao
+    implements BookingDao
+{
+
+    public BookingDaoImpl()
+        throws DaoException
+    {
+    }
+
+    public List getCityDetails()
+        throws DaoException
+    {
+        Connection con;
+        List cityList;
+        con = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        con = getConnection();
+        cityList = new ArrayList();
+        PreparedStatement ps = con.prepareStatement("select * from city;");
+        City city;
+        for(ResultSet rs = ps.executeQuery(); rs.next(); cityList.add(city))
+        {
+            city = new City();
+            city.setId(rs.getInt("id"));
+            city.setName(rs.getString("name"));
+        }
+
+        System.out.println((new StringBuilder("in impl city lists are:")).append(cityList).toString());
+        return cityList;
+        SQLException e;
+        e;
+        e.printStackTrace();
+        throw new DaoException("error in getting city lists", e);
+    }
+
+    public List getHotelDetails(int cityId)
+        throws DaoException
+    {
+        Connection con;
+        List hotelList;
+        con = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        con = getConnection();
+        hotelList = new ArrayList();
+        PreparedStatement ps = con.prepareStatement("select id,name from hotel_info where city_id=?");
+        ps.setInt(1, cityId);
+        HotelInfo hotelInfo;
+        for(ResultSet rs = ps.executeQuery(); rs.next(); hotelList.add(hotelInfo))
+        {
+            hotelInfo = new HotelInfo();
+            hotelInfo.setId(rs.getInt("id"));
+            hotelInfo.setName(rs.getString("name"));
+        }
+
+        return hotelList;
+        SQLException e;
+        e;
+        e.printStackTrace();
+        throw new DaoException("error in getting the hotel details", e);
+    }
+
+    public int addBookingDetails(BookHotel bookHotel)
+        throws DaoException
+    {
+        Connection con;
+        int availableRooms;
+        con = null;
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        con = getConnection();
+        availableRooms = 0;
+        int bookedRooms;
+        PreparedStatement ps = con.prepareStatement("select number_of_rooms from hotel_info where id=?");
+        ps.setInt(1, bookHotel.getHotelInfo().getId());
+        ResultSet rs;
+        for(rs = ps.executeQuery(); rs.next();)
+            availableRooms = rs.getInt("number_of_rooms");
+
+        rs.close();
+        ps.close();
+        bookedRooms = bookHotel.getNoOfRoomsToBeBooked();
+        if(availableRooms != 0 && availableRooms >= bookedRooms)
+            break MISSING_BLOCK_LABEL_110;
+        System.out.println("required number of rooms are not available");
+        return 0;
+        try
+        {
+            if(availableRooms >= bookedRooms)
+            {
+                PreparedStatement ps = con.prepareStatement("insert into book_hotel values(0,?,?,?,?,?,?)", 1);
+                ps.setString(1, bookHotel.getCity());
+                ps.setDate(2, new Date(bookHotel.getCheckInDate().getTime()));
+                ps.setDate(3, new Date(bookHotel.getCheckOutDate().getTime()));
+                ps.setInt(4, bookHotel.getNoOfRoomsToBeBooked());
+                ps.setInt(5, bookHotel.getFlag());
+                ps.setInt(6, bookHotel.getHotelInfo().getId());
+                ps.executeUpdate();
+                for(ResultSet rs = ps.getGeneratedKeys(); rs.next(); bookHotel.setId(rs.getInt(1)));
+                updateHotelRooms(bookHotel, con);
+            }
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return 1;
+    }
+
+    private void updateHotelRooms(BookHotel bookHotel, Connection con)
+        throws DaoException
+    {
+        try
+        {
+            PreparedStatement ps = con.prepareStatement("update hotel_info set number_of_rooms=number_of_rooms-? where id=?");
+            ps.setInt(1, bookHotel.getNoOfRoomsToBeBooked());
+            ps.setInt(2, bookHotel.getHotelInfo().getId());
+            ps.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+            throw new DaoException(" not able to update the rooms in the chosen hotel");
+        }
+    }
+
+    public double getTariffPerDay(int hotelId)
+        throws DaoException
+    {
+        Connection con;
+        ResultSet rs;
+        PreparedStatement ps;
+        double tariff;
+        con = null;
+        rs = null;
+        ps = null;
+        tariff = 0.0D;
+        con = getConnection();
+        try
+        {
+            ps = con.prepareStatement(" select tariff_per_day from hotel_info where id=?");
+            ps.setInt(1, hotelId);
+            for(rs = ps.executeQuery(); rs.next();)
+                tariff = rs.getDouble("tariff_per_day");
+
+            break MISSING_BLOCK_LABEL_97;
+        }
+        catch(SQLException e)
+        {
+            e.printStackTrace();
+        }
+        closeConnection(ps, rs, con);
+        break MISSING_BLOCK_LABEL_105;
+        Exception exception;
+        exception;
+        closeConnection(ps, rs, con);
+        throw exception;
+        closeConnection(ps, rs, con);
+        return tariff;
+    }
+}
